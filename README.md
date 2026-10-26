@@ -20,6 +20,7 @@ As sugestões funcionam localmente sem credenciais: uma busca lexical seleciona 
 - Fila de atendimento com filtros, categorias e prioridade.
 - Criação e atualização de chamados.
 - Base local pesquisável com artigos de suporte fictícios.
+- Editor da base de conhecimento com histórico versionado de cada alteração.
 - Seleção de artigos por correspondência com a mensagem e o assunto.
 - Sugestão de rascunho com fontes identificadas e envio apenas após ação do agente.
 - Registro da resposta e resolução do chamado.
@@ -38,6 +39,8 @@ As sugestões funcionam localmente sem credenciais: uma busca lexical seleciona 
 - `POST /api/tickets` — cria chamado.
 - `PATCH /api/tickets/:id/status` — atualiza status.
 - `GET /api/articles` — lista artigos.
+- `POST /api/articles` e `PUT /api/articles/:id` — cria ou edita artigos; edições preservam a versão anterior.
+- `GET /api/articles/:id/history` — histórico de versões do artigo.
 - `POST /api/suggest` — recupera fontes e gera rascunho.
 - `POST /api/replies` — registra resposta revisada.
 
