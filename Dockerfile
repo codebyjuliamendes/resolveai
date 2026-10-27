@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # --- build: resolve dependências com uv a partir do lockfile ---
-FROM ghcr.io/astral-sh/uv:0.11 AS uv
+FROM ghcr.io/astral-sh/uv:0.13 AS uv
 FROM python:3.12-slim AS builder
 COPY --from=uv /uv /bin/uv
 ENV UV_COMPILE_BYTECODE=1 \
