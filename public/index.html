@@ -1,1 +1,106 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f6f6f4"><title>ResolveAI — atendimento com contexto</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="/styles.css"><script defer src="/app.js"></script><link rel="icon" type="image/svg+xml" href="/mark-ra.svg"><link rel="apple-touch-icon" href="/mark-ra.svg"></head><body><aside class="sidebar"><a class="brand" href="/"><span class="brand-icon"><img class="brand-logo" src="/mark-ra.svg" alt=""></span><span>resolve<span>ai</span></span></a><div class="workspace"><span class="workspace-icon">S</span><span>Support Team<small>Central de atendimento</small></span><b>⌄</b></div><div class="nav-label">ESPAÇO DE TRABALHO</div><button class="nav active">▤ <span>Chamados</span><b id="open-count">—</b></button><button class="nav" id="knowledge-nav">▧ <span>Base de conhecimento</span></button><div class="sidebar-bottom"><div class="ai-card"><span>✳</span><strong>Atendimento com contexto</strong><p>Sugestões ligadas a artigos. Você decide o que enviar.</p></div><div class="agent"><span class="agent-avatar">JM</span><span>Júlia Mendes<small>Agente de suporte</small></span><span class="online"></span></div></div></aside><main><header><div><span class="eyebrow">INBOX <b>/</b> CHAMADOS</span><h1>Fila de atendimento</h1></div><button id="new-ticket" class="primary">+ Novo chamado</button></header><section class="workspace-grid"><aside class="ticket-column"><div class="ticket-toolbar"><div class="tabs"><button class="tab active" data-filter="open">Abertos <span id="tab-open">—</span></button><button class="tab" data-filter="all">Todos</button><button class="tab" data-filter="resolvido">Resolvidos</button></div><span class="search-icon">⌕</span></div><div id="ticket-list" class="ticket-list"></div></aside><section id="detail" class="detail"></section><aside class="knowledge"><div class="knowledge-head"><span class="spark" aria-hidden="true"></span><div><h2>Base de conhecimento</h2><p>Artigos para apoiar a resposta.</p></div><button id="new-article" class="knowledge-add">+ Artigo</button></div><div class="searchbox"><span>⌕</span><input id="article-search" placeholder="Buscar artigo"></div><div id="article-list" class="article-list"></div><div class="knowledge-tip"><b>Como funciona</b><p>As fontes aparecem junto da sugestão. Se não houver artigo relevante, o ResolveAI sinaliza o próximo passo humano.</p></div></aside></section><footer>ResolveAI <span>Rascunhos assistidos · revisão humana antes do envio</span></footer></main><div id="modal" class="modal" hidden></div><div id="toast" class="toast"></div></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f8f5fb" id="theme-color">
+  <meta name="description" content="Central de atendimento com sugestões de resposta ligadas aos artigos da base de conhecimento.">
+  <title>ResolveAI — atendimento com contexto</title>
+  <script src="/theme.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" type="image/svg+xml" href="/mark-ra.svg">
+  <link rel="apple-touch-icon" href="/mark-ra.svg">
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#detail">Ir para o chamado selecionado</a>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="ResolveAI — início">
+      <span class="brand-icon"><img class="brand-logo" src="/mark-ra.svg" alt="" width="28" height="28"></span>
+      <span class="brand-name" aria-hidden="true">resolve<span>ai</span></span>
+    </a>
+    <div class="workspace">
+      <span class="workspace-icon" aria-hidden="true">S</span>
+      <span>Support Team<small>Central de atendimento</small></span>
+    </div>
+    <nav class="nav-group" aria-label="Espaço de trabalho">
+      <button type="button" class="nav active" id="tickets-nav" aria-current="page">
+        <span aria-hidden="true">▤</span> <span>Chamados</span> <b id="open-count" aria-label="chamados abertos">—</b>
+      </button>
+      <button type="button" class="nav" id="knowledge-nav">
+        <span aria-hidden="true">▧</span> <span>Base de conhecimento</span>
+      </button>
+    </nav>
+    <div class="topbar-end">
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false" title="Alternar tema">
+        <span class="theme-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Tema escuro</span>
+      </button>
+      <div class="agent">
+        <span class="agent-avatar" aria-hidden="true">JM</span>
+        <span class="agent-name">Júlia Mendes<small>Agente de suporte</small></span>
+        <span class="online" title="Online"><span class="visually-hidden">Online</span></span>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="page-head">
+      <div>
+        <span class="eyebrow">INBOX <b aria-hidden="true">/</b> CHAMADOS</span>
+        <h1>Fila de atendimento</h1>
+      </div>
+      <button type="button" id="new-ticket" class="primary">+ Novo chamado</button>
+    </div>
+
+    <div class="workspace-grid">
+      <section class="panel ticket-column" id="tickets" aria-labelledby="tickets-title">
+        <h2 id="tickets-title" class="visually-hidden">Chamados</h2>
+        <div class="ticket-toolbar">
+          <div class="tabs" role="group" aria-label="Filtrar chamados">
+            <button type="button" class="tab active" data-filter="open" aria-pressed="true">Abertos <span id="tab-open">—</span></button>
+            <button type="button" class="tab" data-filter="all" aria-pressed="false">Todos</button>
+            <button type="button" class="tab" data-filter="resolvido" aria-pressed="false">Resolvidos</button>
+          </div>
+        </div>
+        <div id="ticket-list" class="ticket-list" aria-busy="true">
+          <p class="state">Carregando chamados…</p>
+        </div>
+      </section>
+
+      <section id="detail" class="panel detail" tabindex="-1" aria-label="Chamado selecionado">
+        <p class="state">Carregando…</p>
+      </section>
+
+      <section class="panel knowledge" id="knowledge" aria-labelledby="knowledge-title">
+        <div class="knowledge-head">
+          <span class="spark" aria-hidden="true">✳</span>
+          <div>
+            <h2 id="knowledge-title">Base de conhecimento</h2>
+            <p>Artigos para apoiar a resposta.</p>
+          </div>
+          <button type="button" id="new-article" class="knowledge-add">+ Artigo</button>
+        </div>
+        <div class="searchbox">
+          <span aria-hidden="true">⌕</span>
+          <label for="article-search" class="visually-hidden">Buscar artigo</label>
+          <input id="article-search" type="search" placeholder="Buscar artigo" autocomplete="off" maxlength="200">
+        </div>
+        <div id="article-list" class="article-list"></div>
+        <div class="knowledge-tip">
+          <b>Como funciona</b>
+          <p>As fontes aparecem junto da sugestão e só artigos recuperados podem ser citados. Se não houver artigo relevante, o ResolveAI sinaliza o próximo passo humano.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">ResolveAI <span>Rascunhos assistidos · revisão humana antes do envio</span></footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

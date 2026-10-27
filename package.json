@@ -1,1 +1,0 @@
-{"name":"resolveai","version":"1.0.0","private":true,"description":"Central de atendimento com sugestões de resposta baseadas em artigos.","scripts":{"start":"node -r dotenv/config server.js","dev":"node --watch -r dotenv/config server.js","test":"node --test"},"engines":{"node":">=20"},"dependencies":{"better-sqlite3":"^12.4.1","dotenv":"^16.6.1","express":"^5.1.0"}}
