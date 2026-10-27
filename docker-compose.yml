@@ -1,0 +1,24 @@
+services:
+  resolveai:
+    build: .
+    image: resolveai:local
+    ports:
+      - "3004:3004"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATABASE_URL: sqlite:////data/support.sqlite
+    volumes:
+      - resolveai-data:/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    restart: unless-stopped
+
+volumes:
+  resolveai-data:
